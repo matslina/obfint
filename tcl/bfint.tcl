@@ -17,18 +17,19 @@ while {$ip < [string length $K]} {
 	"," {set c [read stdin 1]; if {[string length $c]==1} {lset mem $p [scan $c %c]}}
 	"." {puts -nonewline stdout [format %c [lindex $mem $p]]}
 	"[" {
-	    lappend stack [expr $ip - 1]
 	    if {[lindex $mem $p] == 0} {
 		set depth 1
 		while {$depth != 0} {
 		    incr ip
-		    set c [string index $K [expr $ip+1]]
+		    set c [string index $K $ip]
 		    if {[string equal $c {[} ]} {
 			incr depth
 		    } elseif {[string equal $c "\]"]} {
 			set depth [expr $depth-1]
 		    }
 		}
+	    } else {
+		lappend stack [expr $ip - 1]
 	    }
 	}
 	    "]" {if {[lindex $mem $p] != 0} {set ip [lindex $stack end]}; set stack [lrange $stack 0 end-1];}
